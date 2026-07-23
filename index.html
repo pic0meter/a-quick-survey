@@ -232,10 +232,9 @@
         }
         
         #yesBtn { font-weight: bold; }
+        
+        /* Fixed: No button starts normal and switches to absolute only when handled by JS */
         #noBtn {
-            position: absolute;
-            right: 0;
-            top: 0;
             z-index: 999;
         }
 
@@ -510,6 +509,11 @@
 
         function moveButton() {
             const noBtn = document.getElementById('noBtn');
+            // Dynamically apply absolute positioning only when it needs to move
+            noBtn.style.position = 'absolute';
+            noBtn.style.top = '0';
+            noBtn.style.right = '0';
+            
             const x = Math.floor(Math.random() * 240) - 180; 
             const y = Math.floor(Math.random() * 140) - 150; 
             noBtn.style.transform = `translate(${x}px, ${y}px)`;
@@ -533,7 +537,6 @@
                     document.getElementById('next-wizard-btn').innerText = "Let's See The Plan! 🗓️";
                 }
             } else {
-                // Transition to the new date scheduler instead of immediately celebrating
                 showScheduler();
             }
         }
@@ -559,10 +562,7 @@
                 `See you at Gimenez Gallery, UP Diliman!`
             );
 
-            // Opens default mail app prefilled cleanly
             window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
-
-            // Move to success display automatically
             celebrate();
         }
 

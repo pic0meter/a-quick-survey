@@ -286,6 +286,32 @@
             object-fit: cover;
         }
 
+        /* --- NEW STAGE 2.5: SCHEDULER WIZARD --- */
+        #scheduler-stage {
+            display: none;
+        }
+        .form-group {
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .form-group label {
+            font-size: 13px;
+            color: black;
+            font-weight: bold;
+        }
+        .form-group input, .form-group select {
+            padding: 4px;
+            font-family: 'Pixelated MS Sans Serif', Tahoma, sans-serif;
+            font-size: 13px;
+            background-color: #FFF;
+            border: 2px solid;
+            border-color: #808080 #FFFFFF #FFFFFF #808080;
+            color: black;
+            outline: none;
+        }
+
         /* --- STAGE 3: SUCCESS --- */
         #final-stage {
             display: none;
@@ -356,7 +382,6 @@
                 
                 <div class="reasons-container">
                     <div class="reasons-display-box">
-                        <!-- EXPANDED AND MORE HUMOROUS REASONS -->
                         <div class="reason-item active" id="reason-1">
                             <span style="color:#CC0000; font-weight:bold;">Reason #1: Premium Entertainment Value</span><br>
                             I am incredibly fun to be around and baseline laughter is 100% guaranteed. If you ever find me boring, you can submit a customer complaint form directly to my inbox for a full apology.
@@ -391,12 +416,49 @@
                 </div>
             </div>
 
+            <!-- NEW STAGE 2.5: Art Scene Proposal & Interactive Scheduler -->
+            <div id="scheduler-stage">
+                <h1 class="stage-heading" style="color: #E68A00; border-color: #E68A00;">PlanInitializer.cfg</h1>
+                <p style="font-size: 13px; color: black; margin-top: 0; line-height: 1.4;">
+                    Awesome choice! Here's the plan: <strong>I already secured 2 tickets to a local art scene at the Gimenez Gallery, UP Diliman.</strong>
+                </p>
+                <p style="font-size: 13px; color: black; margin-top: 0; line-height: 1.4;">
+                    The dates lined up are <strong>August 15th, August 16th</strong>, or even both! If you aren't available then, no worries at all—pick your preferred date, time, and custom activity vibe below:
+                </p>
+                
+                <div style="background-color: #EAE8E4; border: 1px dashed #808080; padding: 12px; margin-bottom: 15px;">
+                    <div class="form-group">
+                        <label for="date-select">Select Date:</label>
+                        <input type="date" id="date-select" value="2026-08-15">
+                    </div>
+                    <div class="form-group">
+                        <label for="time-select">Select Desired Time:</label>
+                        <input type="time" id="time-select" value="14:00">
+                    </div>
+                    <div class="form-group">
+                        <label for="activity-select">Choose Side Activity Vibe:</label>
+                        <select id="activity-select">
+                            <option value="Cafe hopping & Debriefing right after">☕ Cafe hopping & Debriefing right after</option>
+                            <option value="Hunting for the best local street food">🍢 Hunting for the best local street food</option>
+                            <option value="A chill walk around UP Diliman campus">🌳 A chill walk around UP Diliman campus</option>
+                            <option value="Surprise me, you're the ultimate 'yes man'">✨ Surprise me, you're the ultimate 'yes man'</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="buttons-wrapper">
+                    <div class="buttons show">
+                        <button class="xp-btn" style="font-weight: bold;" onclick="sendScheduleInfo()">Send Details 🚀</button>
+                    </div>
+                </div>
+            </div>
+
             <!-- STAGE 3: Final Success -->
             <div id="final-stage">
                 <h1 class="stage-heading" style="color: #008000; border-color: #008000;">SYSTEM ACCESS GRANTED</h1>
                 <p style="font-size:14px; color: black;">Initializing celebration protocol...</p>
                 <img src="https://win98icons.alexmeub.com/icons/png/favorites-2.png" alt="Happy icon">
-                <p style="font-size:14px; margin-top:10px; color: black; line-height: 1.4;">Success!<br>I'll text you soon to make a plan. Check your phone!</p>
+                <p style="font-size:14px; margin-top:10px; color: black; line-height: 1.4;">Success!<br>Your plan configuration has been transmitted. I'll text you soon to finalize! Check your phone!</p>
             </div>
         </div>
     </div>
@@ -413,7 +475,7 @@
 
         const stepGifs = {
             1: "https://media.giphy.com/media/l0HlIDZszrOziCYFO/giphy.gif",
-            2: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2NuZGN5YmVpZHc5OWxxbmM0bTVrZWk0YnBzMG5iMmJhZnhiM2s5ZiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/11t7LSpA8LpTjO/giphy.gif", 
+            2: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3NuZGN5YmVpZHc5OWxxbmM0bTVrZWk0YnBzMG5iMmJhZnhiM2s5ZiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/11t7LSpA8LpTjO/giphy.gif", 
             3: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMDRkYjR3cjJhbms4dHh3czdzdzdkZzJjcG03bThtN3p5MGl5bm5jZiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ld1RKulOqeeaI/giphy.gif", 
             4: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNmtlbzU2c3A2N2gxdjN1c3c3aGx3cmhrdzd2NHV0bDQxMmN1cjZuaCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/A06UFEx8jxEwU/giphy.gif", 
             5: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbW15M3c0eW12OHd1eG95ZXFkdzE4eXZ5OHBmdWNsOHV5dHd1eSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/lTQF0ODLLjhza/giphy.gif"  
@@ -468,16 +530,45 @@
                 document.getElementById('wizard-gif').src = stepGifs[currentReasonStep];
 
                 if (currentReasonStep === totalReasons) {
-                    document.getElementById('next-wizard-btn').innerText = "Lock It In! 🥰";
+                    document.getElementById('next-wizard-btn').innerText = "Let's See The Plan! 🗓️";
                 }
             } else {
-                celebrate();
+                // Transition to the new date scheduler instead of immediately celebrating
+                showScheduler();
             }
+        }
+
+        function showScheduler() {
+            document.getElementById('window-title').innerHTML = '<div class="title-bar-icon" style="background-image: url(\'https://win98icons.alexmeub.com/icons/png/schedule-0.png\')"></div> PlanScheduler.exe';
+            document.getElementById('reasons-stage').style.display = 'none';
+            document.getElementById('scheduler-stage').style.display = 'block';
+        }
+
+        function sendScheduleInfo() {
+            const dateSelected = document.getElementById('date-select').value;
+            const timeSelected = document.getElementById('time-select').value;
+            const activitySelected = document.getElementById('activity-select').value;
+
+            const recipient = "markpatrickvcastillo@gmail.com";
+            const subject = encodeURIComponent("Locking It In! Gallery Date Confirmed ❤️");
+            const body = encodeURIComponent(
+                `Hey! I processed the confirmation wizard. Here are my date details:\n\n` +
+                `Selected Date: ${dateSelected}\n` +
+                `Preferred Time: ${timeSelected}\n` +
+                `Chosen Activity Option: ${activitySelected}\n\n` +
+                `See you at Gimenez Gallery, UP Diliman!`
+            );
+
+            // Opens default mail app prefilled cleanly
+            window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
+
+            // Move to success display automatically
+            celebrate();
         }
 
         function celebrate() {
             document.getElementById('window-title').innerHTML = '<div class="title-bar-icon" style="background-image: url(\'https://win98icons.alexmeub.com/icons/png/check-0.png\')"></div> AccessGranted.sys';
-            document.getElementById('reasons-stage').style.display = 'none';
+            document.getElementById('scheduler-stage').style.display = 'none';
             document.getElementById('final-stage').classList.add('show');
         }
     </script>

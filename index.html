@@ -9,7 +9,6 @@
             box-sizing: border-box;
         }
 
-        /* Essential for Retro Look: Use a pixellated font similar to MS Sans Serif */
         @font-face {
             font-family: 'Pixelated MS Sans Serif';
             src: url('https://cdn.jsdelivr.net/gh/phuocng/winxp-fonts@master/ms_sans_serif.woff2') format('woff2');
@@ -18,8 +17,8 @@
         }
 
         body {
-            background-color: #316AC5; /* XP Teal/Blue fallback */
-            background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/e0/Windows_Bliss_Wikipedia.jpg'); /* Bliss Wallpaper */
+            background-color: #316AC5; 
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/e/e0/Windows_Bliss_Wikipedia.jpg'); 
             background-size: cover;
             background-position: center;
             font-family: 'Pixelated MS Sans Serif', Tahoma, Geneva, Verdana, sans-serif;
@@ -31,11 +30,11 @@
             overflow: hidden;
         }
 
-        /* --- START SCREEN (Classic XP Dialog Box) --- */
+        /* --- START SCREEN --- */
         #start-screen {
             position: absolute;
             z-index: 100;
-            background-color: #D4D0C8; /* Classic gray */
+            background-color: #D4D0C8; 
             border: 2px solid;
             border-color: #FFFFFF #808080 #808080 #FFFFFF; 
             box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
@@ -73,7 +72,7 @@
 
         /* --- THE MAIN XP WINDOW CONTAINER --- */
         .xp-window {
-            background-color: #D4D0C8; /* Classic gray */
+            background-color: #D4D0C8; 
             border: 2px solid;
             border-color: #FFFFFF #808080 #808080 #FFFFFF; 
             width: 480px;
@@ -89,7 +88,6 @@
             display: block;
         }
 
-        /* Iconic Blue XP Title Bar */
         .title-bar {
             background: linear-gradient(180deg, #0055EA 0%, #2989FF 45%, #2376E6 60%, #0055EA 100%);
             padding: 3px 6px;
@@ -118,7 +116,6 @@
             background-repeat: no-repeat;
         }
 
-        /* Min/Max/Close Buttons */
         .title-bar-controls {
             display: flex;
             gap: 2px;
@@ -142,7 +139,6 @@
         .title-bar-controls button:hover { opacity: 0.8; }
         .close-btn { background-color: #EF1111 !important; border: 1px solid #AD0000 !important; }
 
-        /* --- THE CONTENT AREA --- */
         .window-body {
             padding: 20px;
             text-align: left;
@@ -157,7 +153,6 @@
             padding-bottom: 5px;
         }
 
-        /* Stage 1 Layout */
         .confession-area {
             display: flex;
             gap: 15px;
@@ -179,17 +174,24 @@
             font-size: 14px; 
             line-height: 1.5;
             white-space: pre-wrap;
-            display: inline;
-            border-right: 2px solid black; 
-            padding-right: 2px;
+            display: inline-block;
+            position: relative;
+        }
+
+        .typewriter-text.typing::after {
+            content: "|";
+            font-weight: normal;
+            display: inline-block;
+            margin-left: 2px;
             animation: blink 0.7s step-end infinite;
         }
 
         @keyframes blink {
-            from, to { border-color: transparent }
-            50% { border-color: black; }
+            from, to { opacity: 0 }
+            50% { opacity: 1; }
         }
 
+        /* --- BUTTONS SYSTEM --- */
         .buttons-wrapper {
             position: relative;
             margin-top: 20px;
@@ -235,10 +237,9 @@
             right: 0;
             top: 0;
             z-index: 999;
-            transition: transform 0.1s ease-out;
         }
 
-        /* --- NEW STAGE 2: REASONS LAYOUT --- */
+        /* --- STAGE 2: REASONS (WIZARD MODE) --- */
         #reasons-stage {
             display: none;
         }
@@ -246,24 +247,33 @@
             display: flex;
             gap: 20px;
             margin-top: 10px;
+            min-height: 150px;
         }
-        .reasons-list {
+        .reasons-display-box {
             flex: 1;
             font-size: 14px;
             color: black;
             line-height: 1.6;
-            margin: 0;
-            padding-left: 20px;
         }
-        .reasons-list li {
-            margin-bottom: 8px;
+        .reason-item {
+            display: none;
+            margin: 0;
+            font-weight: normal;
+        }
+        .reason-item.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .gif-box {
             width: 150px;
             height: 150px;
             background-color: #FFF;
             border: 2px solid;
-            border-color: #808080 #FFFFFF #FFFFFF #808080; /* Sunken box */
+            border-color: #808080 #FFFFFF #FFFFFF #808080; 
             display: flex;
             justify-content: center;
             align-items: center;
@@ -276,7 +286,7 @@
             object-fit: cover;
         }
 
-        /* Final Stage 3 styling */
+        /* --- STAGE 3: SUCCESS --- */
         #final-stage {
             display: none;
             text-align: center;
@@ -326,7 +336,7 @@
                 
                 <div class="confession-area">
                     <div class="message-icon"></div>
-                    <div class="typewriter-text" id="confession-text"></div>
+                    <div class="typewriter-text typing" id="confession-text"></div>
                 </div>
                 
                 <div class="buttons-wrapper">
@@ -337,31 +347,47 @@
                 </div>
             </div>
 
-            <!-- STAGE 2: The 5 Reasons -->
+            <!-- STAGE 2: The 5 Reasons (Wizard Format) -->
             <div id="reasons-stage">
                 <h1 class="stage-heading" style="color: #0055EA; border-color: #0055EA;">DecisionHelper.exe</h1>
-                <p style="font-size: 14px; color: black; margin-top: 0; font-weight: bold;">
+                <p style="font-size: 14px; color: black; margin-top: 0; font-weight: bold;" id="wizard-prompt">
                     Wait! To help you decide, here are 5 reasons why you should consider dating me:
                 </p>
                 
                 <div class="reasons-container">
-                    <ol class="reasons-list">
-                        <li>I give fantastic music recommendations.</li>
-                        <li>Free food / snacks are absolutely guaranteed.</li>
-                        <li>I am an excellent listener (especially when you talk about your days).</li>
-                        <li>You will always have a player 2 for your hobbies.</li>
-                        <li>Honestly? We just make a really great team.</li>
-                    </ol>
+                    <div class="reasons-display-box">
+                        <!-- Each reason wrapped inside an individual block -->
+                        <div class="reason-item active" id="reason-1">
+                            <span style="color:#CC0000; font-weight:bold;">Reason #1:</span><br>
+                            I give fantastic music recommendations. You'll never run out of good tracks.
+                        </div>
+                        <div class="reason-item" id="reason-2">
+                            <span style="color:#CC0000; font-weight:bold;">Reason #2:</span><br>
+                            Free food and delicious snacks are absolutely guaranteed whenever we hang out.
+                        </div>
+                        <div class="reason-item" id="reason-3">
+                            <span style="color:#CC0000; font-weight:bold;">Reason #3:</span><br>
+                            I am an excellent listener (especially when you need to rant or talk about your day).
+                        </div>
+                        <div class="reason-item" id="reason-4">
+                            <span style="color:#CC0000; font-weight:bold;">Reason #4:</span><br>
+                            You will always have a dedicated player 2 ready for any game or hobby you like.
+                        </div>
+                        <div class="reason-item" id="reason-5">
+                            <span style="color:#CC0000; font-weight:bold;">Reason #5:</span><br>
+                            Honestly? We already match each other's energy perfectly. We make a really great team.
+                        </div>
+                    </div>
                     
                     <div class="gif-box">
-                        <!-- REPLACE THIS URL WITH ANY CUTE GIF LINK YOU WANT -->
-                        <img src="https://media.giphy.com/media/l0HlIDZszrOziCYFO/giphy.gif" alt="Cute retro gif">
+                        <img id="wizard-gif" src="https://media.giphy.com/media/l0HlIDZszrOziCYFO/giphy.gif" alt="Cute retro gif">
                     </div>
                 </div>
 
                 <div class="buttons-wrapper" style="margin-top: 25px;">
                     <div class="buttons show">
-                        <button class="xp-btn" style="font-weight: bold;" onclick="celebrate()">Lock It In! 🥰</button>
+                        <!-- Next button handling the cycle, changes text at the end -->
+                        <button class="xp-btn" id="next-wizard-btn" style="font-weight: bold;" onclick="nextReason()">Next ></button>
                     </div>
                 </div>
             </div>
@@ -380,13 +406,26 @@
         const originalMessage = "I've been holding onto a secret for a while now...\n\nEvery time I talk to you, my day instantly gets better. I've developed a massive crush on you. \n\nWill you go out on a date with me?";
         
         let index = 0;
-        const typingSpeed = 50; 
+        const typingSpeed = 45; 
         const textElement = document.getElementById("confession-text");
+
+        // Wizard state tracker
+        let currentReasonStep = 1;
+        const totalReasons = 5;
+
+        // Custom GIF URLs mapping for each specific step
+        const stepGifs = {
+            1: "https://media.giphy.com/media/l0HlIDZszrOziCYFO/giphy.gif",
+            2: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2NuZGN5YmVpZHc5OWxxbmM0bTVrZWk0YnBzMG5iMmJhZnhiM2s5ZiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/11t7LSpA8LpTjO/giphy.gif", // Snack/Food placeholder
+            3: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMDRkYjR3cjJhbms4dHh3czdzdzdkZzJjcG03bThtN3p5MGl5bm5jZiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ld1RKulOqeeaI/giphy.gif", // Listening placeholder
+            4: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNmtlbzU2c3A2N2gxdjN1c3c3aGx3cmhrdzd2NHV0bDQxMmN1cjZuaCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/A06UFEx8jxEwU/giphy.gif", // Gaming placeholder
+            5: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbW15M3c0eW12OHd1eG95ZXFkdzE4eXZ5OHBmdWNsOHV5dHd1eSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/lTQF0ODLLjhza/giphy.gif"  // Hearts team placeholder
+        };
 
         function startExperience() {
             const music = document.getElementById("bg-music");
             music.play().catch(error => {
-                console.log("Audio playback failed, but continuing site:", error);
+                console.log("Audio playback failed:", error);
             });
 
             const startScreen = document.getElementById("start-screen");
@@ -405,29 +444,46 @@
                 index++;
                 setTimeout(typeWriter, typingSpeed);
             } else {
-                textElement.style.borderRight = "none";
+                textElement.classList.remove("typing");
                 document.getElementById("btn-container").classList.add("show");
             }
         }
 
         function moveButton() {
             const noBtn = document.getElementById('noBtn');
-            const x = Math.floor(Math.random() * 260) - 180; 
-            const y = Math.floor(Math.random() * 150) - 160; 
+            const x = Math.floor(Math.random() * 240) - 180; 
+            const y = Math.floor(Math.random() * 140) - 150; 
             noBtn.style.transform = `translate(${x}px, ${y}px)`;
         }
 
-        // Transition to Stage 2: Reasons list
         function showReasons() {
-            // Update Title Bar to match the new vibe
             document.getElementById('window-title').innerHTML = '<div class="title-bar-icon" style="background-image: url(\'https://win98icons.alexmeub.com/icons/png/help_book_computer-4.png\')"></div> Reasons.exe';
-            
-            // Swap screens
             document.getElementById('typing-stage').style.display = 'none';
             document.getElementById('reasons-stage').style.display = 'block';
         }
 
-        // Transition to Stage 3: Celebration
+        // Stepper functionality for Next clicks
+        function nextReason() {
+            // Hide the current active text
+            document.getElementById(`reason-${currentReasonStep}`).classList.remove('active');
+            
+            currentReasonStep++;
+
+            if (currentReasonStep <= totalReasons) {
+                // Show the next step's text and update corresponding GIF
+                document.getElementById(`reason-${currentReasonStep}`).classList.add('active');
+                document.getElementById('wizard-gif').src = stepGifs[currentReasonStep];
+
+                // If it is the absolute final reason, mutate button label text
+                if (currentReasonStep === totalReasons) {
+                    document.getElementById('next-wizard-btn').innerText = "Lock It In! 🥰";
+                }
+            } else {
+                // All reasons completed, execute final destination phase
+                celebrate();
+            }
+        }
+
         function celebrate() {
             document.getElementById('window-title').innerHTML = '<div class="title-bar-icon" style="background-image: url(\'https://win98icons.alexmeub.com/icons/png/check-0.png\')"></div> AccessGranted.sys';
             document.getElementById('reasons-stage').style.display = 'none';

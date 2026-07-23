@@ -76,7 +76,7 @@
             background-color: #D4D0C8; /* Classic gray */
             border: 2px solid;
             border-color: #FFFFFF #808080 #808080 #FFFFFF; 
-            width: 450px;
+            width: 480px;
             max-width: 95%;
             box-shadow: 4px 4px 10px rgba(0,0,0,0.4);
             opacity: 0;
@@ -148,7 +148,7 @@
             text-align: left;
         }
 
-        h1#heading {
+        h1.stage-heading {
             color: #CC0000; 
             margin-top: 0;
             margin-bottom: 15px;
@@ -157,7 +157,7 @@
             padding-bottom: 5px;
         }
 
-        /* Fixed Confession Area and Cursor */
+        /* Stage 1 Layout */
         .confession-area {
             display: flex;
             gap: 15px;
@@ -174,7 +174,6 @@
             margin-top: 3px;
         }
 
-        /* Fixed Typewriter formatting & precise cursor scale */
         .typewriter-text {
             color: black;
             font-size: 14px; 
@@ -191,7 +190,6 @@
             50% { border-color: black; }
         }
 
-        /* --- FIXED FIXED XP BUTTONS LAYOUT --- */
         .buttons-wrapper {
             position: relative;
             margin-top: 20px;
@@ -231,11 +229,7 @@
             padding: 7px 21px 5px 23px; 
         }
         
-        #yesBtn {
-            font-weight: bold; 
-        }
-
-        /* Runaway configurations */
+        #yesBtn { font-weight: bold; }
         #noBtn {
             position: absolute;
             right: 0;
@@ -244,7 +238,45 @@
             transition: transform 0.1s ease-out;
         }
 
-        /* Final Stage styling */
+        /* --- NEW STAGE 2: REASONS LAYOUT --- */
+        #reasons-stage {
+            display: none;
+        }
+        .reasons-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+        }
+        .reasons-list {
+            flex: 1;
+            font-size: 14px;
+            color: black;
+            line-height: 1.6;
+            margin: 0;
+            padding-left: 20px;
+        }
+        .reasons-list li {
+            margin-bottom: 8px;
+        }
+        .gif-box {
+            width: 150px;
+            height: 150px;
+            background-color: #FFF;
+            border: 2px solid;
+            border-color: #808080 #FFFFFF #FFFFFF #808080; /* Sunken box */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .gif-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Final Stage 3 styling */
         #final-stage {
             display: none;
             text-align: center;
@@ -259,7 +291,7 @@
 
     <audio id="bg-music" src="music.mp3" loop></audio>
 
-    <!-- 1. Start Screen (Fixed heading text to "Attention: Hi Ace!") -->
+    <!-- 1. Start Screen -->
     <div id="start-screen">
         <div class="xp-window" style="opacity:1; display:block; position:relative; width:auto; box-shadow:none;">
             <div class="title-bar">
@@ -275,8 +307,8 @@
     <!-- 2. Main XP Window content -->
     <div class="xp-window" id="main-container">
         <div class="title-bar">
-            <div class="title-bar-text">
-                <div class="title-bar-icon"></div>
+            <div class="title-bar-text" id="window-title">
+                <div class="title-bar-icon" id="window-icon"></div>
                 MsgRecv.exe - Confidential
             </div>
             <div class="title-bar-controls">
@@ -288,25 +320,55 @@
 
         <div class="window-body">
             
+            <!-- STAGE 1: Confession & Typewriter -->
             <div id="typing-stage">
-                <h1 id="heading">Message for you...</h1>
+                <h1 class="stage-heading">Message for you...</h1>
                 
                 <div class="confession-area">
                     <div class="message-icon"></div>
                     <div class="typewriter-text" id="confession-text"></div>
                 </div>
                 
-                <!-- Fixed interactive button area layout -->
                 <div class="buttons-wrapper">
                     <div class="buttons" id="btn-container">
-                        <button class="xp-btn" id="yesBtn" onclick="celebrate()">Yes</button>
+                        <button class="xp-btn" id="yesBtn" onclick="showReasons()">Yes</button>
                         <button class="xp-btn" id="noBtn" onmouseover="moveButton()" onclick="moveButton()">No</button>
                     </div>
                 </div>
             </div>
 
+            <!-- STAGE 2: The 5 Reasons -->
+            <div id="reasons-stage">
+                <h1 class="stage-heading" style="color: #0055EA; border-color: #0055EA;">DecisionHelper.exe</h1>
+                <p style="font-size: 14px; color: black; margin-top: 0; font-weight: bold;">
+                    Wait! To help you decide, here are 5 reasons why you should consider dating me:
+                </p>
+                
+                <div class="reasons-container">
+                    <ol class="reasons-list">
+                        <li>I give fantastic music recommendations.</li>
+                        <li>Free food / snacks are absolutely guaranteed.</li>
+                        <li>I am an excellent listener (especially when you talk about your days).</li>
+                        <li>You will always have a player 2 for your hobbies.</li>
+                        <li>Honestly? We just make a really great team.</li>
+                    </ol>
+                    
+                    <div class="gif-box">
+                        <!-- REPLACE THIS URL WITH ANY CUTE GIF LINK YOU WANT -->
+                        <img src="https://media.giphy.com/media/l0HlIDZszrOziCYFO/giphy.gif" alt="Cute retro gif">
+                    </div>
+                </div>
+
+                <div class="buttons-wrapper" style="margin-top: 25px;">
+                    <div class="buttons show">
+                        <button class="xp-btn" style="font-weight: bold;" onclick="celebrate()">Lock It In! 🥰</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STAGE 3: Final Success -->
             <div id="final-stage">
-                <h1 id="heading" style="color: #008000; border-color: #008000;">SYSTEM ACCESS GRANTED</h1>
+                <h1 class="stage-heading" style="color: #008000; border-color: #008000;">SYSTEM ACCESS GRANTED</h1>
                 <p style="font-size:14px; color: black;">Initializing celebration protocol...</p>
                 <img src="https://win98icons.alexmeub.com/icons/png/favorites-2.png" alt="Happy icon">
                 <p style="font-size:14px; margin-top:10px; color: black; line-height: 1.4;">Success!<br>I'll text you soon to make a plan. Check your phone!</p>
@@ -348,19 +410,27 @@
             }
         }
 
-        // Fixed Runaway Logic to ensure it hops away inside viewport bounds securely
         function moveButton() {
             const noBtn = document.getElementById('noBtn');
-            
-            // Randomly jump around the window environment
             const x = Math.floor(Math.random() * 260) - 180; 
             const y = Math.floor(Math.random() * 150) - 160; 
-            
             noBtn.style.transform = `translate(${x}px, ${y}px)`;
         }
 
-        function celebrate() {
+        // Transition to Stage 2: Reasons list
+        function showReasons() {
+            // Update Title Bar to match the new vibe
+            document.getElementById('window-title').innerHTML = '<div class="title-bar-icon" style="background-image: url(\'https://win98icons.alexmeub.com/icons/png/help_book_computer-4.png\')"></div> Reasons.exe';
+            
+            // Swap screens
             document.getElementById('typing-stage').style.display = 'none';
+            document.getElementById('reasons-stage').style.display = 'block';
+        }
+
+        // Transition to Stage 3: Celebration
+        function celebrate() {
+            document.getElementById('window-title').innerHTML = '<div class="title-bar-icon" style="background-image: url(\'https://win98icons.alexmeub.com/icons/png/check-0.png\')"></div> AccessGranted.sys';
+            document.getElementById('reasons-stage').style.display = 'none';
             document.getElementById('final-stage').classList.add('show');
         }
     </script>

@@ -356,26 +356,26 @@
                 
                 <div class="reasons-container">
                     <div class="reasons-display-box">
-                        <!-- Each reason wrapped inside an individual block -->
+                        <!-- EXPANDED USER REASONS -->
                         <div class="reason-item active" id="reason-1">
                             <span style="color:#CC0000; font-weight:bold;">Reason #1:</span><br>
-                            I give fantastic music recommendations. You'll never run out of good tracks.
+                            I'm incredibly fun to be around. Laughing is a baseline guarantee, and I'll always know how to make you smile.
                         </div>
                         <div class="reason-item" id="reason-2">
                             <span style="color:#CC0000; font-weight:bold;">Reason #2:</span><br>
-                            Free food and delicious snacks are absolutely guaranteed whenever we hang out.
+                            I am literally up for absolutely everything. New food joint? Let's go. Sketchy activity? Count me in. Road trip? Done.
                         </div>
                         <div class="reason-item" id="reason-3">
                             <span style="color:#CC0000; font-weight:bold;">Reason #3:</span><br>
-                            I am an excellent listener (especially when you need to rant or talk about your day).
+                            I mean, look at the package deal. I got the face, I got the brains, and I got the humor. Basically, I'm perfect. 💅
                         </div>
                         <div class="reason-item" id="reason-4">
                             <span style="color:#CC0000; font-weight:bold;">Reason #4:</span><br>
-                            You will always have a dedicated player 2 ready for any game or hobby you like.
+                            I will always be your primary hype partner. Whatever your goals or hobbies are, I'm here to match your energy and celebrate them with you.
                         </div>
                         <div class="reason-item" id="reason-5">
                             <span style="color:#CC0000; font-weight:bold;">Reason #5:</span><br>
-                            Honestly? We already match each other's energy perfectly. We make a really great team.
+                            Honestly? We already make a great team. Plus, look at this website—you are guaranteed never to have a boring day with me.
                         </div>
                     </div>
                     
@@ -386,7 +386,6 @@
 
                 <div class="buttons-wrapper" style="margin-top: 25px;">
                     <div class="buttons show">
-                        <!-- Next button handling the cycle, changes text at the end -->
                         <button class="xp-btn" id="next-wizard-btn" style="font-weight: bold;" onclick="nextReason()">Next ></button>
                     </div>
                 </div>
@@ -409,17 +408,16 @@
         const typingSpeed = 45; 
         const textElement = document.getElementById("confession-text");
 
-        // Wizard state tracker
         let currentReasonStep = 1;
         const totalReasons = 5;
 
         // Custom GIF URLs mapping for each specific step
         const stepGifs = {
             1: "https://media.giphy.com/media/l0HlIDZszrOziCYFO/giphy.gif",
-            2: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2NuZGN5YmVpZHc5OWxxbmM0bTVrZWk0YnBzMG5iMmJhZnhiM2s5ZiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/11t7LSpA8LpTjO/giphy.gif", // Snack/Food placeholder
-            3: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMDRkYjR3cjJhbms4dHh3czdzdzdkZzJjcG03bThtN3p5MGl5bm5jZiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ld1RKulOqeeaI/giphy.gif", // Listening placeholder
-            4: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNmtlbzU2c3A2N2gxdjN1c3c3aGx3cmhrdzd2NHV0bDQxMmN1cjZuaCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/A06UFEx8jxEwU/giphy.gif", // Gaming placeholder
-            5: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbW15M3c0eW12OHd1eG95ZXFkdzE4eXZ5OHBmdWNsOHV5dHd1eSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/lTQF0ODLLjhza/giphy.gif"  // Hearts team placeholder
+            2: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2NuZGN5YmVpZHc5OWxxbmM0bTVrZWk0YnBzMG5iMmJhZnhiM2s5ZiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/11t7LSpA8LpTjO/giphy.gif", 
+            3: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMDRkYjR3cjJhbms4dHh3czdzdzdkZzJjcG03bThtN3p5MGl5bm5jZiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ld1RKulOqeeaI/giphy.gif", 
+            4: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNmtlbzU2c3A2N2gxdjN1c3c3aGx3cmhrdzd2NHV0bDQxMmN1cjZuaCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/A06UFEx8jxEwU/giphy.gif", 
+            5: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbW15M3c0eW12OHd1eG95ZXFkdzE4eXZ5OHBmdWNsOHV5dHd1eSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/lTQF0ODLLjhza/giphy.gif"  
         };
 
         function startExperience() {
@@ -462,24 +460,18 @@
             document.getElementById('reasons-stage').style.display = 'block';
         }
 
-        // Stepper functionality for Next clicks
         function nextReason() {
-            // Hide the current active text
             document.getElementById(`reason-${currentReasonStep}`).classList.remove('active');
-            
             currentReasonStep++;
 
             if (currentReasonStep <= totalReasons) {
-                // Show the next step's text and update corresponding GIF
                 document.getElementById(`reason-${currentReasonStep}`).classList.add('active');
                 document.getElementById('wizard-gif').src = stepGifs[currentReasonStep];
 
-                // If it is the absolute final reason, mutate button label text
                 if (currentReasonStep === totalReasons) {
                     document.getElementById('next-wizard-btn').innerText = "Lock It In! 🥰";
                 }
             } else {
-                // All reasons completed, execute final destination phase
                 celebrate();
             }
         }

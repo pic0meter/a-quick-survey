@@ -75,7 +75,7 @@
             background-color: #D4D0C8; 
             border: 2px solid;
             border-color: #FFFFFF #808080 #808080 #FFFFFF; 
-            width: 480px;
+            width: 520px;
             max-width: 95%;
             box-shadow: 4px 4px 10px rgba(0,0,0,0.4);
             opacity: 0;
@@ -153,42 +153,64 @@
             padding-bottom: 5px;
         }
 
-        .confession-area {
+        /* --- WOULD YOU RATHER UI --- */
+        .wyr-subtitle {
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 15px;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .wyr-container {
             display: flex;
             gap: 15px;
-            align-items: flex-start;
-            min-height: 130px; 
-        }
-        .message-icon {
-            width: 32px;
-            height: 32px;
-            background-image: url('https://win98icons.alexmeub.com/icons/png/message_envelope_open-0.png'); 
-            background-size: contain;
-            background-repeat: no-repeat;
-            flex-shrink: 0;
-            margin-top: 3px;
+            justify-content: space-between;
+            margin-bottom: 10px;
         }
 
-        .typewriter-text {
+        .wyr-card {
+            flex: 1;
+            background: #FFFFFF;
+            border: 2px solid;
+            border-color: #808080 #FFFFFF #FFFFFF #808080;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .wyr-card:hover {
+            background-color: #F1EFEA;
+        }
+
+        .wyr-image-box {
+            width: 100%;
+            height: 140px;
+            background-color: #EAE8E4;
+            border: 1px solid #808080;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .wyr-image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .wyr-text {
+            font-size: 13px;
             color: black;
-            font-size: 14px; 
-            line-height: 1.5;
-            white-space: pre-wrap;
-            display: inline-block;
-            position: relative;
-        }
-
-        .typewriter-text.typing::after {
-            content: "|";
-            font-weight: normal;
-            display: inline-block;
-            margin-left: 2px;
-            animation: blink 0.7s step-end infinite;
-        }
-
-        @keyframes blink {
-            from, to { opacity: 0 }
-            50% { opacity: 1; }
+            line-height: 1.4;
+            font-weight: bold;
+            flex-grow: 1;
         }
 
         /* --- BUTTONS SYSTEM --- */
@@ -205,13 +227,6 @@
             gap: 12px;
             width: 100%;
             height: 100%;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease;
-        }
-        .buttons.show {
-            opacity: 1;
-            visibility: visible;
         }
 
         button.xp-btn {
@@ -229,13 +244,6 @@
         button.xp-btn:active {
             border-color: #808080 #FFFFFF #FFFFFF #808080; 
             padding: 7px 21px 5px 23px; 
-        }
-        
-        #yesBtn { font-weight: bold; }
-        
-        /* Fixed: No button starts normal and switches to absolute only when handled by JS */
-        #noBtn {
-            z-index: 999;
         }
 
         /* --- STAGE 2: REASONS (WIZARD MODE) --- */
@@ -285,15 +293,21 @@
             object-fit: cover;
         }
 
-        /* --- NEW STAGE 2.5: SCHEDULER WIZARD --- */
+        /* --- STAGE 2.5: SCHEDULER WIZARD --- */
         #scheduler-stage {
             display: none;
+        }
+        .form-row {
+            display: flex;
+            gap: 10px;
+            width: 100%;
         }
         .form-group {
             margin-bottom: 12px;
             display: flex;
             flex-direction: column;
             gap: 4px;
+            flex: 1;
         }
         .form-group label {
             font-size: 13px;
@@ -309,6 +323,7 @@
             border-color: #808080 #FFFFFF #FFFFFF #808080;
             color: black;
             outline: none;
+            height: 26px;
         }
 
         /* --- STAGE 3: SUCCESS --- */
@@ -339,12 +354,12 @@
         </div>
     </div>
 
-    <!-- 2. Main XP Window content -->
+    <!-- 2. Main XP Window container -->
     <div class="xp-window" id="main-container">
         <div class="title-bar">
             <div class="title-bar-text" id="window-title">
                 <div class="title-bar-icon" id="window-icon"></div>
-                MsgRecv.exe - Confidential
+                WYR_Protocol.exe - Security Check
             </div>
             <div class="title-bar-controls">
                 <button onclick="alert('Nice try!')">0</button> 
@@ -355,19 +370,26 @@
 
         <div class="window-body">
             
-            <!-- STAGE 1: Confession & Typewriter -->
-            <div id="typing-stage">
-                <h1 class="stage-heading">Message for you...</h1>
+            <!-- STAGE 1: WOULD YOU RATHER SYSTEM -->
+            <div id="wyr-stage">
+                <h1 class="stage-heading" id="wyr-heading">Would You Rather... (1/3)</h1>
+                <div class="wyr-subtitle">Select your preferred systemic reality to proceed.</div>
                 
-                <div class="confession-area">
-                    <div class="message-icon"></div>
-                    <div class="typewriter-text typing" id="confession-text"></div>
-                </div>
-                
-                <div class="buttons-wrapper">
-                    <div class="buttons" id="btn-container">
-                        <button class="xp-btn" id="yesBtn" onclick="showReasons()">Yes</button>
-                        <button class="xp-btn" id="noBtn" onmouseover="moveButton()" onclick="moveButton()">No</button>
+                <div class="wyr-container">
+                    <!-- Option A: The Chaos Choice -->
+                    <div class="wyr-card" onclick="chooseOption('A')">
+                        <div class="wyr-image-box">
+                            <img id="img-option-a" src="" alt="Option A Image">
+                        </div>
+                        <div class="wyr-text" id="text-option-a">Loading chaotic choice...</div>
+                    </div>
+                    
+                    <!-- Option B: The Date Choice -->
+                    <div class="wyr-card" onclick="chooseOption('B')">
+                        <div class="wyr-image-box">
+                            <img id="img-option-b" src="" alt="Option B Image">
+                        </div>
+                        <div class="wyr-text" id="text-option-b">Go out with me!</div>
                     </div>
                 </div>
             </div>
@@ -409,30 +431,41 @@
                 </div>
 
                 <div class="buttons-wrapper" style="margin-top: 25px;">
-                    <div class="buttons show">
+                    <div class="buttons">
                         <button class="xp-btn" id="next-wizard-btn" style="font-weight: bold;" onclick="nextReason()">Next ></button>
                     </div>
                 </div>
             </div>
 
-            <!-- NEW STAGE 2.5: Art Scene Proposal & Interactive Scheduler -->
+            <!-- STAGE 2.5: Art Scene Proposal & Interactive Scheduler -->
             <div id="scheduler-stage">
                 <h1 class="stage-heading" style="color: #E68A00; border-color: #E68A00;">PlanInitializer.cfg</h1>
                 <p style="font-size: 13px; color: black; margin-top: 0; line-height: 1.4;">
                     Awesome choice! Here's the plan: <strong>I already secured 2 tickets to a local art scene at the Gimenez Gallery, UP Diliman.</strong>
                 </p>
                 <p style="font-size: 13px; color: black; margin-top: 0; line-height: 1.4;">
-                    The dates lined up are <strong>August 15th, August 16th</strong>, or even both! If you aren't available then, no worries at all—pick your preferred date, time, and custom activity vibe below:
+                    The dates lined up are <strong>August 15th, August 16th</strong>, or even both! If you aren't available then, no worries at all—pick your preferred date, time, budget, and custom activity vibe below:
                 </p>
                 
                 <div style="background-color: #EAE8E4; border: 1px dashed #808080; padding: 12px; margin-bottom: 15px;">
-                    <div class="form-group">
-                        <label for="date-select">Select Date:</label>
-                        <input type="date" id="date-select" value="2026-08-15">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="date-select">Select Date:</label>
+                            <input type="date" id="date-select" value="2026-08-15">
+                        </div>
+                        <div class="form-group">
+                            <label for="time-select">Select Time:</label>
+                            <input type="time" id="time-select" value="14:00">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="time-select">Select Desired Time:</label>
-                        <input type="time" id="time-select" value="14:00">
+                        <label for="budget-select">Preferred Budget Range:</label>
+                        <select id="budget-select">
+                            <option value="Student-friendly / Super chill (₱0 - ₱300 each)">💸 Student-friendly / Super chill (₱0 - ₱300 each)</option>
+                            <option value="Moderate / Good food tier (₱300 - ₱800 each)" selected>🍕 Moderate / Good food tier (₱300 - ₱800 each)</option>
+                            <option value="Treat yo' self / Fancy vibes (₱800+ each)">✨ Treat yo' self / Fancy vibes (₱800+ each)</option>
+                            <option value="Completely up to you, I'm just here for the ride">🎲 Completely up to you, I'm just here for the ride</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="activity-select">Choose Side Activity Vibe:</label>
@@ -446,8 +479,8 @@
                 </div>
 
                 <div class="buttons-wrapper">
-                    <div class="buttons show">
-                        <button class="xp-btn" style="font-weight: bold;" onclick="sendScheduleInfo()">Send Details 🚀</button>
+                    <div class="buttons">
+                        <button class="xp-btn" id="send-btn" style="font-weight: bold;" onclick="sendScheduleInfo()">Send Details 🚀</button>
                     </div>
                 </div>
             </div>
@@ -463,12 +496,29 @@
     </div>
 
     <script>
-        const originalMessage = "I've been holding onto a secret for a while now...\n\nEvery time I talk to you, my day instantly gets better. I've developed a massive crush on you. \n\nWill you go out on a date with me?";
-        
-        let index = 0;
-        const typingSpeed = 45; 
-        const textElement = document.getElementById("confession-text");
+        // --- POOL OF WOULD YOU RATHER SCENARIOS ---
+        const wyrPool = [
+            {
+                text: "Millions of ants take tiny bites of your body while you lie there unable to move until there's nothing left except your bones.",
+                img: "https://images.unsplash.com/photo-1558925565-d6ca8e4cfd51?w=400&auto=format&fit=crop&q=60" // Vintage nature/insect vibe
+            },
+            {
+                text: "Step bare feet onto Lego bricks covered in high-intensity hot sauce every time you take a step for the rest of eternity.",
+                img: "https://images.unsplash.com/photo-1585366119957-e773c453d107?w=400&auto=format&fit=crop&q=60" // Bricks visual
+            },
+            {
+                text: "Be trapped in a completely silent, windowless room while a distorted Windows 95 startup sound plays at 150% volume on repeat forever.",
+                img: "https://images.unsplash.com/photo-1548345680-f5475ea5df84?w=400&auto=format&fit=crop&q=60" // Retro old monitor feel
+            }
+        ];
 
+        // Choice B (The optimal outcome)
+        const choiceB = {
+            text: "Go out on a date with me! ✨",
+            img: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=400&auto=format&fit=crop&q=60" // Aesthetically pleasing heart/retro light feel
+        };
+
+        let currentWyrIndex = 0;
         let currentReasonStep = 1;
         const totalReasons = 5;
 
@@ -482,46 +532,45 @@
 
         function startExperience() {
             const music = document.getElementById("bg-music");
-            music.play().catch(error => {
-                console.log("Audio playback failed:", error);
-            });
+            music.play().catch(error => console.log("Audio playback failed:", error));
 
             const startScreen = document.getElementById("start-screen");
             startScreen.style.opacity = "0";
-            setTimeout(() => {
-                startScreen.style.display = "none";
-            }, 500);
+            setTimeout(() => { startScreen.style.display = "none"; }, 500);
 
             document.getElementById("main-container").classList.add("show");
-            setTimeout(typeWriter, 700); 
+            renderWyrQuestion();
         }
 
-        function typeWriter() {
-            if (index < originalMessage.length) {
-                textElement.textContent += originalMessage.charAt(index);
-                index++;
-                setTimeout(typeWriter, typingSpeed);
+        function renderWyrQuestion() {
+            if (currentWyrIndex < wyrPool.length) {
+                document.getElementById("wyr-heading").innerText = `Would You Rather... (${currentWyrIndex + 1}/${wyrPool.length})`;
+                
+                // Set Option A (The chaotic alternative)
+                document.getElementById("text-option-a").innerText = wyrPool[currentWyrIndex].text;
+                document.getElementById("img-option-a").src = wyrPool[currentWyrIndex].img;
+                
+                // Set Option B (The logical path)
+                document.getElementById("text-option-b").innerText = choiceB.text;
+                document.getElementById("img-option-b").src = choiceB.img;
             } else {
-                textElement.classList.remove("typing");
-                document.getElementById("btn-container").classList.add("show");
+                // If they survive all choices successfully
+                showReasons();
             }
         }
 
-        function moveButton() {
-            const noBtn = document.getElementById('noBtn');
-            // Dynamically apply absolute positioning only when it needs to move
-            noBtn.style.position = 'absolute';
-            noBtn.style.top = '0';
-            noBtn.style.right = '0';
-            
-            const x = Math.floor(Math.random() * 240) - 180; 
-            const y = Math.floor(Math.random() * 140) - 150; 
-            noBtn.style.transform = `translate(${x}px, ${y}px)`;
+        function chooseOption(choice) {
+            if (choice === 'A') {
+                alert("Nice try! I don't take no for an answer :)");
+            } else if (choice === 'B') {
+                currentWyrIndex++;
+                renderWyrQuestion();
+            }
         }
 
         function showReasons() {
             document.getElementById('window-title').innerHTML = '<div class="title-bar-icon" style="background-image: url(\'https://win98icons.alexmeub.com/icons/png/help_book_computer-4.png\')"></div> Reasons.exe';
-            document.getElementById('typing-stage').style.display = 'none';
+            document.getElementById('wyr-stage').style.display = 'none';
             document.getElementById('reasons-stage').style.display = 'block';
         }
 
@@ -550,20 +599,42 @@
         function sendScheduleInfo() {
             const dateSelected = document.getElementById('date-select').value;
             const timeSelected = document.getElementById('time-select').value;
+            const budgetSelected = document.getElementById('budget-select').value;
             const activitySelected = document.getElementById('activity-select').value;
+            const sendBtn = document.getElementById('send-btn');
 
-            const recipient = "markpatrickvcastillo@gmail.com";
-            const subject = encodeURIComponent("Locking It In! Gallery Date Confirmed ❤️");
-            const body = encodeURIComponent(
-                `Hey! I processed the confirmation wizard. Here are my date details:\n\n` +
-                `Selected Date: ${dateSelected}\n` +
-                `Preferred Time: ${timeSelected}\n` +
-                `Chosen Activity Option: ${activitySelected}\n\n` +
-                `See you at Gimenez Gallery, UP Diliman!`
-            );
+            sendBtn.innerText = "Sending...";
+            sendBtn.disabled = true;
 
-            window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
-            celebrate();
+            const formData = new FormData();
+            formData.append('Selected Date', dateSelected);
+            formData.append('Preferred Time', timeSelected);
+            formData.append('Preferred Budget', budgetSelected);
+            formData.append('Chosen Activity Option', activitySelected);
+            formData.append('_subject', 'Locking It In! Gallery Date Confirmed ❤️');
+
+            fetch('https://formspree.io/f/xykrnjky', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    celebrate();
+                } else {
+                    alert("Oops! Transmission failed. Please try again.");
+                    sendBtn.innerText = "Send Details 🚀";
+                    sendBtn.disabled = false;
+                }
+            })
+            .catch(error => {
+                console.error("Formspree Error:", error);
+                alert("Network error. Please try again.");
+                sendBtn.innerText = "Send Details 🚀";
+                sendBtn.disabled = false;
+            });
         }
 
         function celebrate() {

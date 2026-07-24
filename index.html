@@ -490,7 +490,7 @@
                 
                 <div class="buttons-wrapper">
                     <div class="buttons" id="btn-container">
-                        <button class="xp-btn" id="yesBtn" onclick="showReasons()">Yes</button>
+                        <button class="xp-btn" id="yesBtn" onclick="showReasons()">View Reasons</button>
                         <button class="xp-btn" id="noBtn" onmouseover="moveButton()" onclick="moveButton()">No</button>
                     </div>
                 </div>
@@ -500,7 +500,7 @@
             <div id="reasons-stage">
                 <h1 class="stage-heading" style="color: #0055EA; border-color: #0055EA;">DecisionHelper.exe</h1>
                 <p style="font-size: 14px; color: black; margin-top: 0; font-weight: bold;" id="wizard-prompt">
-                    Wait! To help you decide, here are 5 completely objective reasons why you should consider dating me:
+                    Analyzing database configurations...
                 </p>
                 
                 <div class="reasons-container">
@@ -598,7 +598,7 @@
     </div>
 
     <script>
-        const originalMessage = "I've been holding onto a secret for a while now...\n\nEvery time I talk to you, my day instantly gets better. I've developed a massive crush on you. \n\nWill you go out on a date with me?";
+        const originalMessage = "I've been holding onto a secret for a while now...\n\nEvery time I talk to you, my day instantly gets better. I've developed a massive crush on you. \n\nTo help you decide, here are 5 completely objective reasons why you should consider dating me.";
         const errorMessage = "Nice try. Unfortunately, I don't take no for an answer. Let's do this again!";
         
         let msgIndex = 0;
@@ -655,7 +655,6 @@
                 setTimeout(typeError, typingSpeed);
             } else {
                 errElement.classList.remove("typing");
-                // Pause briefly on completed error string before kicking them back to the choice
                 setTimeout(() => {
                     document.getElementById('window-title').innerHTML = '<div class="title-bar-icon" style="background-image: url(\'https://win98icons.alexmeub.com/icons/png/key-2.png\')"></div> WYR_Protocol.exe - Decryption Security Check';
                     document.getElementById('error-stage').style.display = 'none';

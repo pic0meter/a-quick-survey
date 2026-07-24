@@ -172,7 +172,73 @@
             padding-bottom: 5px;
         }
 
+        /* --- STAGE 0.5: CAPTCHA UI --- */
+        .captcha-instruction {
+            background-color: #0055EA;
+            color: white;
+            padding: 12px;
+            font-size: 13px;
+            margin-bottom: 15px;
+            border: 1px solid #002E7A;
+        }
+        .captcha-instruction strong {
+            font-size: 16px;
+            display: block;
+            margin-top: 2px;
+        }
+        .captcha-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            background-color: #FFF;
+            border: 2px solid;
+            border-color: #808080 #FFFFFF #FFFFFF #808080;
+            padding: 6px;
+        }
+        .captcha-tile {
+            width: 100%;
+            aspect-ratio: 1 / 1; 
+            position: relative;
+            cursor: pointer;
+            border: 1px solid #DFDFDF;
+            overflow: hidden;
+            background-color: #EAE8E4;
+        }
+        .captcha-tile img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            display: block;
+            transition: transform 0.1s ease;
+        }
+        .captcha-tile.selected img {
+            transform: scale(0.85);
+        }
+        .captcha-tile.selected::after {
+            content: "✓";
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background-color: #0055EA;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            font-weight: bold;
+            border: 1px solid white;
+            box-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+            z-index: 2;
+        }
+
         /* --- WOULD YOU RATHER UI --- */
+        #wyr-stage {
+            display: none;
+        }
+
         .wyr-subtitle {
             font-size: 12px;
             color: #555;
@@ -443,7 +509,6 @@
                 <div class="title-bar-text">Attention: Hi Ace!</div>
             </div>
             <div class="window-body" style="padding: 15px;">
-                <!-- Integrated loading media asset here -->
                 <div class="start-gif-container">
                     <img src="1.gif" alt="System Processing Vibe">
                 </div>
@@ -468,6 +533,23 @@
         </div>
 
         <div class="window-body">
+
+            <!-- STAGE 0.5: CAPTCHA SECURITY INTERFACE -->
+            <div id="captcha-stage">
+                <h1 class="stage-heading" style="color: #0055EA; border-color: #0055EA;">Security Check: Verification Required</h1>
+                <div class="captcha-instruction">
+                    Select all squares containing:
+                    <strong>The guy you're going to go out with</strong>
+                </div>
+                
+                <div class="captcha-grid" id="captchaGridContainer"></div>
+
+                <div class="buttons-wrapper" style="margin-top: 15px;">
+                    <div class="buttons show">
+                        <button class="xp-btn" style="font-weight: bold; background-color: #0055EA; color: white; border-color: #2989FF #002E7A #002E7A #2989FF;" onclick="verifyCaptcha()">Verify</button>
+                    </div>
+                </div>
+            </div>
             
             <!-- STAGE 1: THE ULTIMATUM WOULD YOU RATHER -->
             <div id="wyr-stage">
@@ -475,7 +557,6 @@
                 <div class="wyr-subtitle">Select your preferred systemic reality to proceed.</div>
                 
                 <div class="wyr-container">
-                    <!-- Option A: The Chaos Choice (Ants) -->
                     <div class="wyr-card" onclick="chooseOption('A')">
                         <div class="wyr-image-box">
                             <img src="https://images.unsplash.com/photo-1558925565-d6ca8e4cfd51?w=400&auto=format&fit=crop&q=60" alt="Ants">
@@ -483,7 +564,6 @@
                         <div class="wyr-text">Millions of ants take tiny bites of your body while you lie there unable to move until there's nothing left except your bones.</div>
                     </div>
                     
-                    <!-- Option B: The Date Choice -->
                     <div class="wyr-card" onclick="chooseOption('B')">
                         <div class="wyr-image-box">
                             <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=400&auto=format&fit=crop&q=60" alt="Go out with me">
@@ -562,7 +642,7 @@
                 </div>
             </div>
 
-            <!-- STAGE 2.5: Art Scene Proposal & Interactive Scheduler -->
+            <!-- STAGE 2.5: Interactive Scheduler -->
             <div id="scheduler-stage">
                 <h1 class="stage-heading" style="color: #E68A00; border-color: #E68A00;">PlanInitializer.cfg</h1>
                 <p style="font-size: 13px; color: black; margin-top: 0; line-height: 1.4;">
@@ -623,6 +703,7 @@
     <script>
         const originalMessage = "I've been holding onto a secret for a while now...\n\nEvery time I talk to you, my day instantly gets better. I've developed a massive crush on you. \n\nTo help you decide, here are 5 completely objective reasons why you should consider dating me.";
         const errorMessage = "Nice try. Unfortunately, I don't take no for an answer. Let's do this again!";
+        const captchaErrorMessage = "Verification failed. Incorrect human identity signatures detected. System resetting...";
         
         let msgIndex = 0;
         let errIndex = 0;
@@ -639,6 +720,37 @@
             5: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbW15M3c0eW12OHd1eG95ZXFkdzE4eXZ5OHBmdWNsOHV5dHd1eSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/lTQF0ODLLjhza/giphy.gif"  
         };
 
+        // --- DYNAMIC SHUFFLE CAPTCHA BUILDER ---
+        function renderJumbledCaptcha() {
+            const container = document.getElementById('captchaGridContainer');
+            container.innerHTML = ""; 
+
+            const photoIds = [2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+            // Shuffle photo positions completely
+            for (let i = photoIds.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [photoIds[i], photoIds[j]] = [photoIds[j], photoIds[i]];
+            }
+
+            photoIds.forEach((id, index) => {
+                const tile = document.createElement('div');
+                tile.className = 'captcha-tile';
+                tile.setAttribute('data-id', id);
+                tile.onclick = function() { toggleTile(this); };
+
+                const img = document.createElement('img');
+                img.src = `${id}.jpg`;
+                img.alt = `Option ${index + 1}`;
+
+                tile.appendChild(img);
+                container.appendChild(tile);
+            });
+        }
+
+        // Initialize jumbled structure instantly
+        renderJumbledCaptcha();
+
         function startExperience() {
             const music = document.getElementById("bg-music");
             music.play().catch(error => console.log("Audio playback failed:", error));
@@ -650,16 +762,79 @@
             document.getElementById("main-container").classList.add("show");
         }
 
+        function toggleTile(element) {
+            element.classList.toggle('selected');
+        }
+
+        function verifyCaptcha() {
+            const tiles = document.querySelectorAll('.captcha-tile');
+            let totalCorrectSelected = 0;
+            let totalIncorrectSelected = 0;
+
+            tiles.forEach(tile => {
+                const id = parseInt(tile.getAttribute('data-id'));
+                const isSelected = tile.classList.contains('selected');
+                
+                // NEW VALIDATION TARGET SET: 2, 3, 4, 5 are the correct answers now
+                if (id >= 2 && id <= 5) {
+                    if (isSelected) totalCorrectSelected++;
+                } else {
+                    if (isSelected) totalIncorrectSelected++;
+                }
+            });
+
+            // Verification passes only if all 4 correct matches are chosen and zero incorrect parameters are hit
+            if (totalCorrectSelected === 4 && totalIncorrectSelected === 0) {
+                document.getElementById('captcha-stage').style.display = 'none';
+                document.getElementById('wyr-stage').style.display = 'block';
+            } else {
+                showCaptchaError();
+            }
+        }
+
+        function showCaptchaError() {
+            document.getElementById('window-title').innerHTML = '<div class="title-bar-icon" style="background-image: url(\'https://win98icons.alexmeub.com/icons/png/msg_error-0.png\')"></div> Security Breach Detection';
+            document.getElementById('captcha-stage').style.display = 'none';
+            document.getElementById('error-stage').style.display = 'block';
+            
+            errIndex = 0;
+            document.getElementById("error-text").textContent = "";
+            document.getElementById("error-text").classList.add("typing");
+            
+            const errorAudio = new Audio('https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg');
+            errorAudio.volume = 0.3;
+            errorAudio.play().catch(()=>{});
+
+            typeCaptchaError();
+        }
+
+        function typeCaptchaError() {
+            const errElement = document.getElementById("error-text");
+            if (errIndex < captchaErrorMessage.length) {
+                errElement.textContent += captchaErrorMessage.charAt(errIndex);
+                errIndex++;
+                setTimeout(typeCaptchaError, typingSpeed);
+            } else {
+                errElement.classList.remove("typing");
+                setTimeout(() => {
+                    renderJumbledCaptcha();
+                    document.getElementById('window-title').innerHTML = '<div class="title-bar-icon" style="background-image: url(\'https://win98icons.alexmeub.com/icons/png/key-2.png\')"></div> WYR_Protocol.exe - Decryption Security Check';
+                    document.getElementById('error-stage').style.display = 'none';
+                    document.getElementById('captcha-stage').style.display = 'block';
+                }, 3000);
+            }
+        }
+
+        // --- WOULD YOU RATHER SCENARIOS ---
         function chooseOption(choice) {
             if (choice === 'A') {
-                showErrorScreen();
+                showWyrErrorScreen();
             } else if (choice === 'B') {
                 showConfessionScreen();
             }
         }
 
-        // --- WRONG ANSWER SCENARIO (ANT CHOICE) ---
-        function showErrorScreen() {
+        function showWyrErrorScreen() {
             document.getElementById('window-title').innerHTML = '<div class="title-bar-icon" style="background-image: url(\'https://win98icons.alexmeub.com/icons/png/msg_error-0.png\')"></div> Execution Failure';
             document.getElementById('wyr-stage').style.display = 'none';
             document.getElementById('error-stage').style.display = 'block';
@@ -667,15 +842,15 @@
             errIndex = 0;
             document.getElementById("error-text").textContent = "";
             document.getElementById("error-text").classList.add("typing");
-            typeError();
+            typeWyrError();
         }
 
-        function typeError() {
+        function typeWyrError() {
             const errElement = document.getElementById("error-text");
             if (errIndex < errorMessage.length) {
                 errElement.textContent += errorMessage.charAt(errIndex);
                 errIndex++;
-                setTimeout(typeError, typingSpeed);
+                setTimeout(typeWyrError, typingSpeed);
             } else {
                 errElement.classList.remove("typing");
                 setTimeout(() => {
@@ -686,7 +861,7 @@
             }
         }
 
-        // --- CORRECT ANSWER SCENARIO (DATE CHOICE) ---
+        // --- DECISION SCENARIO ---
         function showConfessionScreen() {
             document.getElementById('window-title').innerHTML = '<div class="title-bar-icon" style="background-image: url(\'https://win98icons.alexmeub.com/icons/png/message_envelope_open-0.png\')"></div> MsgRecv.exe - Confidential';
             document.getElementById('wyr-stage').style.display = 'none';

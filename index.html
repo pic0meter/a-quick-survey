@@ -950,12 +950,30 @@
 
         function moveButton() {
             const noBtn = document.getElementById('noBtn');
-            noBtn.style.position = 'absolute';
-            noBtn.style.top = '0';
-            noBtn.style.right = '0';
             
-            const x = Math.floor(Math.random() * 240) - 180; 
-            const y = Math.floor(Math.random() * 140) - 150; 
+            // If this is the first hover event, lock layout dimensions and break out seamlessly
+            if (noBtn.style.position !== 'absolute') {
+                const rect = noBtn.getBoundingClientRect();
+                const parentRect = noBtn.offsetParent.getBoundingClientRect();
+                const currentLeft = rect.left - parentRect.left;
+                const currentTop = rect.top - parentRect.top;
+
+                // Create a matching layout placeholder box so 'View Reasons' stays static
+                const placeholder = document.createElement('div');
+                placeholder.style.width = noBtn.offsetWidth + 'px';
+                placeholder.style.height = noBtn.offsetHeight + 'px';
+                noBtn.parentNode.insertBefore(placeholder, noBtn);
+
+                // Lock initial calculated coordinates down
+                noBtn.style.position = 'absolute';
+                noBtn.style.left = currentLeft + 'px';
+                noBtn.style.top = currentTop + 'px';
+                noBtn.style.margin = '0';
+            }
+            
+            // Generate standard chaotic system offset jump vectors
+            const x = Math.floor(Math.random() * 320) - 160; 
+            const y = Math.floor(Math.random() * 200) - 100; 
             noBtn.style.transform = `translate(${x}px, ${y}px)`;
         }
 
